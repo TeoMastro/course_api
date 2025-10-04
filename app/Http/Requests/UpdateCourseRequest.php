@@ -2,35 +2,27 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-use App\Enums\CourseStatus;
-
-class UpdateCourseRequest extends FormRequest
+class UpdateCourseRequest extends BaseCourseRequest
 {
-    public function authorize(): bool
-    {
-        return true;
-    }
-
     public function rules(): array
     {
+        $baseRules = $this->getCourseValidationRules();
+        
         return [
-            'title' => 'sometimes|required|string|max:255',
-            'description' => 'nullable|string',
-            'status' => 'sometimes|required|in:' . implode(',', CourseStatus::values()),
-            'is_premium' => 'sometimes|required|boolean',
+            'title' => 'sometimes|required|' . $baseRules['title'],
+            'description' => $baseRules['description'],
+            'status' => 'sometimes|required|' . $baseRules['status'],
+            'is_premium' => 'sometimes|required|' . $baseRules['is_premium'],
         ];
     }
 
-    public function messages(): array
+    protected function getArrayRejectionMessage(): string
     {
-        return [
-            'title.required' => 'The course title is required.',
-            'title.max' => 'The course title may not be greater than 255 characters.',
-            'status.required' => 'The course status is required.',
-            'status.in' => 'The selected status is invalid. Must be Published or Pending.',
-            'is_premium.required' => 'The premium status is required.',
-            'is_premium.boolean' => 'The premium status must be true or false.',
-        ];
+        return 'This endpoint accepts only a single course object for updates. To update multiple courses, send individual requests.';
+    }
+
+    protected function getArrayRejectionError(): string
+    {
+        return 'Array of courses not supported for updates.';
     }
 }

@@ -8,14 +8,14 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class CourseRepository implements CourseRepositoryInterface
 {
-    public function paginate(int $perPage = 15): LengthAwarePaginator
+    public function paginate(int $perPage = Course::DEFAULT_PAGINATION_SIZE): LengthAwarePaginator
     {
-        return Course::paginate($perPage);
+        return Course::withoutTrashed()->paginate($perPage);
     }
 
     public function findById(int $id): ?Course
     {
-        return Course::find($id);
+        return Course::withoutTrashed()->find($id);
     }
 
     public function create(array $data): Course

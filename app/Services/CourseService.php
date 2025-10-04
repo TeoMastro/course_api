@@ -12,7 +12,7 @@ class CourseService
         private CourseRepositoryInterface $courseRepository
     ) {}
 
-    public function getAllCourses(int $perPage = 15): LengthAwarePaginator
+    public function getAllCourses(int $perPage = Course::DEFAULT_PAGINATION_SIZE): LengthAwarePaginator
     {
         return $this->courseRepository->paginate($perPage);
     }

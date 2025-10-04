@@ -11,7 +11,7 @@ class Course extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'course';
+    public const DEFAULT_PAGINATION_SIZE = 15;
 
     protected $fillable = [
         'title',

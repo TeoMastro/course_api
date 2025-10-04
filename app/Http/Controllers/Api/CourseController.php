@@ -7,6 +7,8 @@ use App\Http\Requests\StoreCourseRequest;
 use App\Http\Requests\UpdateCourseRequest;
 use App\Services\CourseService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use App\Models\Course;
 
 class CourseController extends Controller
 {
@@ -17,10 +19,11 @@ class CourseController extends Controller
     /**
      * Display a listing of courses.
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
         try {
-            $courses = $this->courseService->getAllCourses();
+            $perPage = $request->input('per_page', Course::DEFAULT_PAGINATION_SIZE);
+            $courses = $this->courseService->getAllCourses($perPage);
             
             return response()->json([
                 'success' => true,
@@ -30,6 +33,8 @@ class CourseController extends Controller
                     'last_page' => $courses->lastPage(),
                     'per_page' => $courses->perPage(),
                     'total' => $courses->total(),
+                    'from' => $courses->firstItem(),
+                    'to' => $courses->lastItem(),
                 ]
             ], 200);
         } catch (\Exception $e) {
