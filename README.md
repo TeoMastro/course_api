@@ -21,11 +21,11 @@ A RESTful CRUD API for managing courses with pagination, validation, and soft de
 
 ```
 # 1. Clone your repo
-git clone https://github.com/username/your-api-app.git
-cd your-api-app
+git clone https://github.com/TeoMastro/course_api.git
+cd course_api
 
 # 2. Install dependencies
-docker run --rm -v $(pwd):/opt -w /opt laravelsail/php81-composer:latest composer install
+docker run --rm -v $(pwd):/opt -w /opt laravelsail/php84-composer:latest composer install
 
 # 3. Set permissions
 sudo chown -R $USER: .
@@ -33,7 +33,7 @@ sudo chown -R $USER: .
 # 4. Create environment file
 cp .env.example .env
 
-# 5. Edit .env file (set DB_HOST=mysql, etc.)
+# 5. Edit .env file if needed for your local setup (set different ports, etc.)
 
 # 6. Start Sail
 ./vendor/bin/sail up -d
@@ -41,8 +41,13 @@ cp .env.example .env
 # 7. Generate app key
 ./vendor/bin/sail artisan key:generate
 
-# 8. Run migrations
+# 8. Clear configuration cache (to re-read the .env in case another one was cached by laravel)
+./vendor/bin/sail artisan config:clear
+
+# 9. Run migrations
 ./vendor/bin/sail artisan migrate
+
+# 10. You are ready. Feel free to open localhost and see the app running.
 
 ```
 
